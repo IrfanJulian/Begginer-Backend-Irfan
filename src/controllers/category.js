@@ -1,18 +1,20 @@
 const categoryModel = require('../models/category')
+const commonHelper = require('../helper/common')
 
-exports.get = (req,res,next) =>{
+exports.get = (req,res, next) =>{
     categoryModel.getData()
     .then((result)=>{
-        res.json({status: 200, message: 'get data success', data: result.rows})
+        commonHelper.response(res, result.rows, 200, 'Get category success')
     })
     .catch((error)=>{
-        res.json({message: 'error', error})
+        next(error)
     })
 }
 
-exports.insert = (req, res, next) => {
+exports.insert = (req, res) => {
     categoryModel.insert(req.body)
       .then((result) =>
+        // commonHelper(res, 200, 'update data success')
         res.send({ status: 200, message: `insert new data success` })
       )
       .catch((err) => res.send({ message: "error", err }));

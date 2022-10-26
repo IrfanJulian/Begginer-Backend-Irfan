@@ -1,8 +1,22 @@
 const pool = require('../configs/db')
 
 const getData = ({search, limit, offset, sortBy, sortList}) =>{
-        return pool.query(`SELECT * FROM products WHERE (name) ILIKE ('%${search}%') ORDER BY ${sortBy} ${sortList} LIMIT ${limit} OFFSET ${offset}`)
-    }
+    // return pool.query(`SELECT * FROM products WHERE (name) ILIKE ('%${search}%') ORDER BY ${sortBy} ${sortList} LIMIT ${limit} OFFSET ${offset}`)    
+    return new Promise((resolve, reject)=>{
+        pool.query(`SELECT * FROM products WHERE (name) ILIKE ('%${search}%') ORDER BY ${sortBy} ${sortList} LIMIT ${limit} OFFSET ${offset}`, (err, result)=>{
+            if(!err){
+                resolve(result)
+            }else{
+                reject(err)
+                console.log(err);
+            }
+        }) 
+    });
+}
+
+// const getRelation = ({sortBy}) =>{
+//     return pool.query(`SELECT products.*, category.name AS category FROM products INNER JOIN category ON products.id_category = category.id WHERE ORDER BY ${sortBy}`)
+// }
 
 const countData = () =>{
     return pool.query(`SELECT COUNT(*) AS total_products FROM products`)
@@ -21,7 +35,7 @@ const countData = () =>{
 
 const insert = (data) => {
     const {name,brand,condition,description,stock,id_category,price} = data;
-    return pool.query(`INSERT INTO products(name,brand,condition,description,stock,id_category,price) VALUES('${name}','${brand}','${condition}','${description}',${stock},${id_category},${price})`);
+    return pool.query(`INSERT INTO products(name,brand,condition,description,stock,id_category,price)VALUES('${name}','${brand}','${condition}','${description}',${stock},${id_category},${price})`);
 }
 // const insertData = ({id, name, description, stock, price}) =>{
 //     return new Promise ((resolve, reject)=>{
@@ -62,4 +76,5 @@ module.exports = {
     update,
     deleteData,
     countData
+    // getRelation
 }

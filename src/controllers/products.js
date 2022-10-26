@@ -1,6 +1,4 @@
 const productModel = require('../models/products')
-const createError = require('http-errors')
-const errorServer = new createError.InternalServerError()
 const commonHelper = require('../helper/common')
 
     exports.getData = async(req,res,next) =>{
@@ -8,7 +6,7 @@ const commonHelper = require('../helper/common')
         const search = req.query.search || '';
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
-        const offset = (page -1) * limit || 0;
+        const offset = (page - 1) * limit || 0;
         const sortBy = req.query.sortBy || 'id';
         const sortList = req.query.sortList || 'asc';
         const result = await productModel.getData({search, page, limit, offset, sortBy, sortList})
@@ -23,10 +21,11 @@ const commonHelper = require('../helper/common')
           totalData,
           totalPage
         }
-        commonHelper.response(res,result.rows,200,'get data success', pagination)
+        // console.log(res);
+        commonHelper.response(res,result.rows, 200, 'get data success', pagination)
         // res.send({status: 200, message: 'get data success', pagination, data: result.rows})
       } catch (err) {
-        next(errorServer)
+        next(err)
       }
     }
 
@@ -53,13 +52,15 @@ const commonHelper = require('../helper/common')
     //     }
     // },
 
-    exports.insert = (req, res) => {
-        productModel.insert(req.body)
-          .then((result) =>
-          commonHelper.response(res,result.command,200,'insert data success')
+    exports.insert = (req, res, next) => {
+        const {name,brand,condition,description,stock,id_category,price} = req.body
+        const data = {name,brand,condition,description,stock,id_category,price} 
+        productModel.insert(data)
+          .then(() =>
+          commonHelper.response(res, data, 201, 'insert data success')
             // res.send({ status: 200, message: `insert new data success` })
           )
-          .catch((err) => res.send({ message: "error", err }));
+          .catch((err) => next(err));
       },
 
     // exports.insert = async(req,res,next) =>{
@@ -75,12 +76,12 @@ const commonHelper = require('../helper/common')
     //     // res.json({status: 200, message: 'data berhasil di tambahkan', data: data})
     // },
 
-    exports.update = (req, res) => {
+    exports.update = (req, res, next) => {
         productModel.update(req.params.id, req.body)
           .then((result) =>
-            commonHelper.response(res,result.command,200,'update data success')
+            commonHelper.response(res,result.command,202,'update data success')
           )
-          .catch((err) => res.send({ message: "error", err }));
+          .catch((err) => next(err));
       },
 
     // exports.update = (req,res,next) =>{
@@ -96,13 +97,13 @@ const commonHelper = require('../helper/common')
         // res.json({status: 200, message: 'data berhasil di ubah', data: data})
     // },
 
-    exports.delete = (req,res) =>{
+    exports.delete = (req,res, next) =>{
         productModel.deleteData(req.params.id)
         .then((result)=>{
-            commonHelper.response(res,result.command,200,'update data success')
+            commonHelper.response(res,result.command,203,'delete data success')
         })
         .catch((error)=>{
-            res.send({message: 'error', error})
+            next(error)
         })
     }
     // exports.delete = (req,res,next) =>{

@@ -17,17 +17,24 @@ app.use(cors(myCors))
 app.use(bodyParser.json())
 
 
-//Router
+// Router
 app.use('/v1', mainRouter)
 
 // Error Handling
-app.use((err, req, res) => {
-  const messError = err.message || "internal server error";
-  const statusCode = err.status || 500;
-  res.status(statusCode).json({
-    message: messError
-  });
-});
+
+app.all('*', (req, res) => {
+  res.status(404).json({message :'Not found'});
+})
+
+// Error Handling
+// app.use((err, req, res) => {
+//   const messError = err.message || "internal server error";
+//   const statusCode = err.status || 500;
+//   console.log(err.message);
+//   res.status(statusCode).json({
+//     message: messError
+//   });
+// });
 
 
 app.listen(PORT, () => {
