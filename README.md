@@ -2,21 +2,73 @@
 
 - REST API NodeJS E-commerce that called Blanja.
 
-## Description
+## API Reference
 
-- This aplication is Back end from Blanja Aplication.
+#### Get all Products
 
-## Build
+```
+  Method: GET 
+  http://localhost:3000/v1/products
+```
 
-- ExpressJS.
+#### Get detail Products
 
-## How to use
+```
+  Method: GET
+  http://localhost/v1/products/${id}
+```
 
-### Instalation
+#### Insert Products
 
-- clone https://github.com/IrfanJulian/Begginer-Backend-Irfan.git
-- npm install.
+```
+  Method: GET
+  http://localhost/v1/products/
+```
 
-### How to Use
+#### Update Products
 
-- npm run dev
+```
+  Mwthod: PUT
+  http://localhost/v1/products/${id}
+```
+
+#### Delete Products
+
+```
+  Method: DELETE
+  http://localhost/v1/products/${id}
+```
+
+## Documentation
+
+```
+  http://localhost:3000/v1
+```
+
+## Installation
+
+  Clone my Project with Git
+
+```
+  git clone https://github.com/IrfanJulian/Begginer-Backend-Irfan.git
+```
+
+## Run Locally
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+
+## Tech
+
+- NodeJS
+- ExpressJS
